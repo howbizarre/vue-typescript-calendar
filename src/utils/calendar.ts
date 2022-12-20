@@ -1,6 +1,18 @@
 import type { CalendarDate, CalendarMonth } from "typescript-calendar-date";
 import { monthName, dayOfWeek, numberOfDaysInMonth } from "typescript-calendar-date";
 
+export type WeekFirstDay = "monday" | "sunday";
+
+export type monthsDays = {
+    "part": {
+        "year": number;
+        "month": string;
+    };
+    "day": string;
+    "current": boolean;
+    "class": string;
+};
+
 export const weekDays = {
     "firstDay": {
         "0": "monday",
@@ -14,16 +26,6 @@ export const weekDays = {
         "short": ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
         "long": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     },
-};
-
-type monthsDays = {
-    "month": {
-        "year": number;
-        "month": string;
-    };
-    "day": string;
-    "current": boolean;
-    "class": string;
 };
 
 export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): monthsDays[] => {
@@ -63,7 +65,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     /** Days of the previous month */
     for (let pm = beforeFirstWeekDay; pm > 0; pm--) {
         daysArray.push({
-            "month": prevMonth,
+            "part": prevMonth,
             "day": (daysInPrevMonth - (pm - 1)).toString(),
             "current": false,
             "class": "previous-month",
@@ -74,7 +76,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     for (let cm = 0; cm < daysInMonth; cm++) {
         const current = someDay === cm + 1;
         daysArray.push({
-            "month": month,
+            "part": month,
             "day": (cm + 1).toString(),
             "current": current,
             "class": "current-month",
@@ -84,7 +86,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     /** Days of the next month */
     for (let nm = 0; nm < afterFirstWeekDay; nm++) {
         daysArray.push({
-            "month": nextMonth,
+            "part": nextMonth,
             "day": (nm + 1).toString(),
             "current": false,
             "class": "next-month",
