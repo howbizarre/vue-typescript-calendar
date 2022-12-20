@@ -44,17 +44,20 @@
                     {{ day[0] }}
                 </span>
                 <template v-for="md in monthDaysArray">
-                    <button @click="(event: Event) => getEvents(md, event)" :class="[{ current: md.current }, md.class]" class="calendar-day">
+                    <button @click="(event: Event) => getEvents(md, event)" :class="[{ current: md.current }, md.class, { active: isActive }]" class="calendar-day">
                         {{ md["day"] }}
                     </button>
                 </template>
             </div>
         </div>
+
         <div class="flex justify-between items-center p-4 leading-normal text-teal-700 bg-teal-100 rounded-b-2xl border border-b-4 border-teal-500" role="alert">
             <span>The chosen day is <strong>{{ dateParts }}</strong></span>
 
             <a href="https://github.com/howbizarre/vue-typescript-calendar" title="Vue 3 with Typescript Calendar and Tailwindcss">
-                <img src="/github-mark.svg" alt="GitHub repository" class="w-5 h-auto" />
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="flex-shrink-0 h-5 w-5" style="" width="1em" height="1em" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.636 3.636 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2.001 2.001 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.104 2.104 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.892 3.892 0 0 1 1.025-2.688a3.594 3.594 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.427 9.427 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.593 3.593 0 0 1 .1 2.65a3.869 3.869 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.563 4.937a2.368 2.368 0 0 1 .675 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247Z"></path>
+                </svg>
             </a>
         </div>
     </div>
@@ -62,7 +65,7 @@
 
 <script lang="ts" setup>
 import { monthName } from "typescript-calendar-date";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { weekDays as wD, getMonthDays } from "@/utils/calendar";
 import type { WeekFirstDay, monthsDays } from "@/utils/calendar";
 
@@ -78,6 +81,7 @@ const nameOfMonth = ref(monthName(month.value));
 const monthDaysArray = ref(getMonthDays(year.value, month.value, day.value));
 
 const resetMonth = ref(false);
+const isActive = ref(false);
 
 /**
  * If set direction to "-1" - draw month before
@@ -133,6 +137,9 @@ const dateParts = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() 
 
 const getEvents = (date: monthsDays, e: Event) => {
     e.preventDefault();
+
+    (e.target as HTMLInputElement).classList.add("active");
+
     const month = date.part.month;
     dateParts.value = `${date.day} ${month.charAt(0).toUpperCase() + month.slice(1)} ${date.part.year}`;
 };
@@ -164,7 +171,8 @@ body {
     @apply text-center w-[42px] h-[42px] rounded-full border-none text-zinc-400 hover:bg-teal-500/25 transition-colors;
 }
 
-.calendar-day.current {
+.calendar-day.current,
+.calendar-day.active {
     @apply bg-teal-500/25;
 }
 </style>
