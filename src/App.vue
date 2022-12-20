@@ -50,8 +50,12 @@
                 </template>
             </div>
         </div>
-        <div class="p-4 text-center leading-normal text-teal-700 bg-teal-100 rounded-b-2xl border border-b-4 border-teal-500" role="alert">
-            <p>The chosen day is <strong>{{ dateParts }}</strong></p>
+        <div class="flex justify-between items-center p-4 leading-normal text-teal-700 bg-teal-100 rounded-b-2xl border border-b-4 border-teal-500" role="alert">
+            <span>The chosen day is <strong>{{ dateParts }}</strong></span>
+
+            <a href="https://github.com/howbizarre/vue-typescript-calendar" title="Vue 3 with Typescript Calendar and Tailwindcss">
+                <img src="/github-mark.svg" alt="GitHub repository" class="w-5 h-auto" />
+            </a>
         </div>
     </div>
 </template>
