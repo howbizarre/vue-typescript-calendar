@@ -11,7 +11,7 @@
                                 <rect width="24" height="24" transform="rotate(90 12 12)" opacity="0" />
                                 <path d="M11.64 5.23a1 1 0 0 0-1.41.13l-5 6a1 1 0 0 0 0 1.27l4.83 6a1 1 0 0 0 .78.37 1 1 0 0 0 .78-1.63L7.29 12l4.48-5.37a1 1 0 0 0-.13-1.4z" />
                                 <path d="M14.29 12l4.48-5.37a1 1 0 0 0-1.54-1.28l-5 6a1 1 0 0 0 0 1.27l4.83 6a1 1 0 0 0 .78.37 1 1 0 0 0 .78-1.63z" />
-                            </g>                            
+                            </g>
                         </svg>
                     </button>
 
@@ -20,7 +20,7 @@
                             <g data-name="close">
                                 <rect width="24" height="24" transform="rotate(180 12 12)" opacity="0" />
                                 <path d="M13.41 12l4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z" />
-                            </g>                            
+                            </g>
                         </svg>
                     </button>
                     <span v-else class="calendar-action empty">
@@ -33,14 +33,14 @@
                                 <rect width="24" height="24" transform="rotate(-90 12 12)" opacity="0" />
                                 <path d="M18.78 11.37l-4.78-6a1 1 0 0 0-1.41-.15 1 1 0 0 0-.15 1.41L16.71 12l-4.48 5.37a1 1 0 0 0 .13 1.41A1 1 0 0 0 13 19a1 1 0 0 0 .77-.36l5-6a1 1 0 0 0 .01-1.27z" />
                                 <path d="M7 5.37a1 1 0 0 0-1.61 1.26L9.71 12l-4.48 5.36a1 1 0 0 0 .13 1.41A1 1 0 0 0 6 19a1 1 0 0 0 .77-.36l5-6a1 1 0 0 0 0-1.27z" />
-                            </g>                            
+                            </g>
                         </svg>
                     </button>
                 </div>
             </div>
 
             <div class="grid grid-cols-7 gap-2">
-                <span v-for="day in weekDays" class="week-day">
+                <span v-for="day in weekDays" class="week-day" :title="day">
                     {{ day[0] }}
                 </span>
                 <template v-for="md in monthDaysArray">
@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="p-4 text-center leading-normal text-teal-700 bg-teal-100 rounded-b-2xl border border-b-4 border-teal-500" role="alert">
-            <p>The chosen day is <strong>{{ datePart }}</strong></p>
+            <p>The chosen day is <strong>{{ dateParts }}</strong></p>
         </div>
     </div>
 </template>
@@ -63,7 +63,7 @@ import { weekDays as wD, getMonthDays } from "@/utils/calendar";
 import type { WeekFirstDay, monthsDays } from "@/utils/calendar";
 
 const firstDayOfTheWeek: WeekFirstDay = "monday";
-const weekDays = wD[firstDayOfTheWeek].short;
+const weekDays = wD[firstDayOfTheWeek].long;
 
 const date = new Date();
 const year = ref(date.getFullYear());
@@ -125,11 +125,12 @@ const setMDA = (direction: number): void => {
     }
 }
 
-const datePart = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() + nameOfMonth.value.slice(1)} ${year.value}`);
+const dateParts = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() + nameOfMonth.value.slice(1)} ${year.value}`);
 
 const getEvents = (date: monthsDays, e: Event) => {
     e.preventDefault();
-    datePart.value = `${date.day} ${date.part.month.charAt(0).toUpperCase() + date.part.month.slice(1)} ${date.part.year}`;
+    const month = date.part.month;
+    dateParts.value = `${date.day} ${month.charAt(0).toUpperCase() + month.slice(1)} ${date.part.year}`;
 };
 </script>
 
