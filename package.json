@@ -3,10 +3,16 @@
     "version": "1.0.2",
     "private": false,
     "description": "Draws a given month with its days using .",
-    "homepage": "https://github.com/howbizarre/vue-typescript-calendar",
+    "homepage": "https://howbizarre.github.io/calendar/",
     "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
     "author": "How Bizarre <how.bizarre@gmail.com>",
-    "keywords": ["vue", "tailwindcss", "typescript", "calendar", "date"],
+    "keywords": [
+        "vue",
+        "tailwindcss",
+        "typescript",
+        "calendar",
+        "date"
+    ],
     "scripts": {
         "dev": "vite",
         "build": "run-p type-check build-only",
