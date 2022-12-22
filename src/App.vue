@@ -69,6 +69,8 @@ import { ref, computed } from "vue";
 import { weekDays as wD, getMonthDays } from "@/utils/calendar";
 import type { WeekFirstDay, monthsDays } from "@/utils/calendar";
 
+type DirectionNumber = 1 | 0 | -1;
+
 const firstDayOfTheWeek: WeekFirstDay = "monday";
 const weekDays = wD[firstDayOfTheWeek].long;
 
@@ -99,13 +101,14 @@ const isActive = ref(false);
  * @function getMonthDays
  * @function monthName
  */
-const setMDA = (direction: number): void => {
+const setMDA = (direction?: DirectionNumber): void => {
     const mV = month.value;
     const yV = year.value;
     const jan = mV === 1;
     const dec = mV === 12;
+    const drctn = direction || 0;
 
-    switch (direction) {
+    switch (drctn) {
         case -1:
             month.value = jan ? 12 : mV - 1;
             year.value = jan ? yV - 1 : yV;
@@ -152,7 +155,11 @@ body {
 }
 
 .calendar-action {
-    @apply mr-3 fill-zinc-400 hover:fill-zinc-900 px-2 bg-teal-500/5 hover:bg-teal-500/25 transition-colors rounded-3xl w-[42px] h-[42px] flex items-center justify-center;
+    @apply
+        flex items-center justify-center
+        mr-3 px-2 w-[42px] h-[42px]
+        transition-colors fill-zinc-400 hover:fill-zinc-900 bg-teal-500/5 hover:bg-teal-500/25
+        rounded-3xl;
 }
 
 .calendar-action.empty {
@@ -160,7 +167,10 @@ body {
 }
 
 .week-day {
-    @apply capitalize text-center flex items-center justify-center w-[42px] h-[42px] text-teal-600 font-bold;
+    @apply
+        w-[42px] h-[42px]
+        flex items-center justify-center
+        capitalize text-center font-bold text-teal-600;
 }
 
 .current-month {
@@ -168,11 +178,17 @@ body {
 }
 
 .calendar-day {
-    @apply text-center w-[42px] h-[42px] rounded-full border-none text-zinc-400 hover:bg-teal-500/25 transition-colors;
+    @apply
+        w-[42px] h-[42px]
+        text-center rounded-full border-none
+        transition-colors text-zinc-400 hover:bg-cyan-500/25;
 }
 
-.calendar-day.current,
-.calendar-day.active {
+.calendar-day.current {
     @apply bg-teal-500/25;
+}
+
+.calendar-day.active {
+    @apply bg-cyan-500/25;
 }
 </style>
