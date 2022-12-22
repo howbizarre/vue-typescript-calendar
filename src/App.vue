@@ -1,7 +1,7 @@
 <template>
     <div class="p-3 max-w-sm">
-        <div class="rounded-t-2xl border border-b-0 border-t-4 border-teal-500 p-3">
-            <div class="flex justify-between">
+        <div class="rounded-t-2xl border border-b-0 border-t-4 border-teal-500/50 pb-3">
+            <div class="flex justify-between mb-3 border-b border-b-teal-500/50 p-3">
                 <h1 class="p-3 text-left capitalize text-3xl font-serif">{{ nameOfMonth }} {{ year }}</h1>
 
                 <div class="flex items-center">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-7 gap-2">
+            <div class="grid grid-cols-7 gap-2 p-3">
                 <span v-for="day, i in weekDayShort" class="week-day" :class="{'weekend': day === 'sat' || day === 'sun'}" :title="weekDayLong[i]">
                     {{ day[0] }}
                 </span>
@@ -173,7 +173,7 @@ body {
 .calendar-action {
     @apply
         flex items-center justify-center
-        mr-3 px-2 w-[42px] h-[42px]
+        ml-3 px-2 w-[42px] h-[42px]
         transition-colors fill-zinc-400 hover:fill-zinc-900 bg-teal-500/5 hover:bg-teal-500/25
         rounded-3xl;
 }
@@ -217,6 +217,6 @@ body {
     @apply
         flex justify-between items-center p-4
         leading-normal text-teal-700 bg-teal-100
-        rounded-b-2xl border border-b-4 border-teal-500
+        rounded-b-2xl border border-b-4 border-teal-500/50
 }
 </style>
