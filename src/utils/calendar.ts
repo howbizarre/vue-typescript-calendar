@@ -62,6 +62,8 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
 
     const daysArray = new Array();
 
+    let count = 0;
+
     /** Days of the previous month */
     for (let pm = beforeFirstWeekDay; pm > 0; pm--) {
         daysArray.push({
@@ -92,6 +94,12 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
             "class": "next-month",
         });
     }
+
+    daysArray.forEach((d) => {
+        if (count > 4) d.class = d.class + " weekend";
+
+        count = count > 5 ? 0 : count + 1;
+    });
 
     return daysArray;
 };

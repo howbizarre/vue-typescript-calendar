@@ -40,18 +40,18 @@
             </div>
 
             <div class="grid grid-cols-7 gap-2">
-                <span v-for="day in weekDays" class="week-day" :title="day">
+                <span v-for="day, i in weekDayShort" class="week-day" :class="{'weekend': day === 'sat' || day === 'sun'}" :title="weekDayLong[i]">
                     {{ day[0] }}
                 </span>
                 <template v-for="md in monthDaysArray">
-                    <button @click="(event: Event) => getEvents(md, event)" :class="[{ current: md.current }, md.class, { active: isActive }]" class="calendar-day">
+                    <button ref="dayBtn" @click="(event: Event) => getEvents(md, event)" :class="[{ current: md.current }, md.class, { active: isActive }]" class="calendar-day">
                         {{ md["day"] }}
                     </button>
                 </template>
             </div>
         </div>
 
-        <div class="flex justify-between items-center p-4 leading-normal text-teal-700 bg-teal-100 rounded-b-2xl border border-b-4 border-teal-500" role="alert">
+        <div class="info-bottom" role="alert">
             <span>The chosen day is <strong>{{ dateParts }}</strong></span>
 
             <a href="https://github.com/howbizarre/vue-typescript-calendar" title="Vue 3 with Typescript Calendar and Tailwindcss">
@@ -65,14 +65,16 @@
 
 <script lang="ts" setup>
 import { monthName } from "typescript-calendar-date";
-import { ref, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { weekDays as wD, getMonthDays } from "@/utils/calendar";
 import type { WeekFirstDay, monthsDays } from "@/utils/calendar";
 
 type DirectionNumber = 1 | 0 | -1;
 
 const firstDayOfTheWeek: WeekFirstDay = "monday";
-const weekDays = wD[firstDayOfTheWeek].long;
+const weekDays = wD[firstDayOfTheWeek];
+const weekDayShort = weekDays.short;
+const weekDayLong = weekDays.long;
 
 const date = new Date();
 const year = ref(date.getFullYear());
@@ -84,6 +86,8 @@ const monthDaysArray = ref(getMonthDays(year.value, month.value, day.value));
 
 const resetMonth = ref(false);
 const isActive = ref(false);
+
+const dayBtn = ref<HTMLElement[]>([]);
 
 /**
  * If set direction to "-1" - draw month before
@@ -97,6 +101,7 @@ const isActive = ref(false);
  * @external monthDaysArray.value
  * @external nameOfMonth.value
  * @external resetMonth.value
+ * @external dayBtn.value
  * 
  * @function getMonthDays
  * @function monthName
@@ -108,10 +113,15 @@ const setMDA = (direction?: DirectionNumber): void => {
     const dec = mV === 12;
     const drctn = direction || 0;
 
+    dayBtn.value.forEach((e) => {
+        e.classList.remove("active");
+    });
+
     switch (drctn) {
         case -1:
             month.value = jan ? 12 : mV - 1;
             year.value = jan ? yV - 1 : yV;
+
             monthDaysArray.value = getMonthDays(year.value, month.value);
             nameOfMonth.value = monthName(month.value);
             resetMonth.value = true;
@@ -121,6 +131,7 @@ const setMDA = (direction?: DirectionNumber): void => {
         case 1:
             month.value = dec ? 1 : mV + 1;
             year.value = dec ? yV + 1 : yV;
+
             monthDaysArray.value = getMonthDays(year.value, month.value);
             nameOfMonth.value = monthName(month.value);
             resetMonth.value = true;
@@ -130,16 +141,21 @@ const setMDA = (direction?: DirectionNumber): void => {
         default:
             month.value = new Date().getMonth() + 1;
             year.value = new Date().getFullYear();
+
             monthDaysArray.value = getMonthDays(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
             nameOfMonth.value = monthName(new Date().getMonth() + 1);
             resetMonth.value = false;
     }
-}
+};
 
 const dateParts = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() + nameOfMonth.value.slice(1)} ${year.value}`);
 
 const getEvents = (date: monthsDays, e: Event) => {
     e.preventDefault();
+
+    dayBtn.value.forEach((e: any) => {
+        e.classList.remove("active");
+    });
 
     (e.target as HTMLInputElement).classList.add("active");
 
@@ -168,9 +184,14 @@ body {
 
 .week-day {
     @apply
-        w-[42px] h-[42px]
+        w-[42px] h-[42px] rounded-full
         flex items-center justify-center
         capitalize text-center font-bold text-teal-600;
+}
+
+.calendar-day.weekend,
+.week-day.weekend {
+    @apply bg-sky-500/5;
 }
 
 .current-month {
@@ -190,5 +211,12 @@ body {
 
 .calendar-day.active {
     @apply bg-cyan-500/25;
+}
+
+.info-bottom {
+    @apply
+        flex justify-between items-center p-4
+        leading-normal text-teal-700 bg-teal-100
+        rounded-b-2xl border border-b-4 border-teal-500
 }
 </style>
