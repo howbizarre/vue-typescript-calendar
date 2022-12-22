@@ -1,6 +1,6 @@
 {
     "name": "vue-typescript-calendar",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "private": false,
     "description": "Draws a given month with its days using .",
     "homepage": "https://howbizarre.github.io/calendar/",
