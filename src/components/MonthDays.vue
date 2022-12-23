@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-7 gap-2 p-3">
+    <div class="calendar-grid">
         <template v-for="md in daysArray">
             <button ref="dayBtn" @click="(event: Event) => $emit('onDayClick', md, event)" :class="[{ current: md.current }, md.class]" class="calendar-day">
                 {{ md["day"] }}

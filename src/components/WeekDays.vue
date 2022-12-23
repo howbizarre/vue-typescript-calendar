@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-7 gap-2 p-3">
+    <div class="calendar-grid">
         <template v-for="day, i in weekDays.short" :key="i">
             <span class="week-day" :class="{ 'weekend': day === 'sat' || day === 'sun' }" :title="weekDays.long[i]">
                 {{ day[0] }}

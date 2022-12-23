@@ -115,7 +115,10 @@ const setMDA = (direction?: DirectionNumber): void => {
     const dec = mV === 12;
     const drctn = direction || 0;
 
+    const curMonth = monthName(date.getMonth() + 1) as string;
+
     activatElm.value = undefined;
+    dateParts.value = `${date.getDate()} ${curMonth[0].toUpperCase() + curMonth.slice(1)} ${date.getFullYear()}`;
 
     switch (drctn) {
         case -1:
