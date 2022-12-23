@@ -3,7 +3,7 @@ import { monthName, dayOfWeek, numberOfDaysInMonth } from "typescript-calendar-d
 
 export type WeekFirstDay = "monday" | "sunday";
 
-export type monthsDays = {
+export type MonthsDays = {
     "part": {
         "year": number;
         "month": string;
@@ -28,7 +28,7 @@ export const weekDays = {
     },
 };
 
-export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): monthsDays[] => {
+export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): MonthsDays[] => {
     const month: CalendarMonth = {
         year: someYear,
         month: monthName(someMonth),
@@ -60,7 +60,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     const beforeFirstWeekDay = cols - 1 - (cols - 1 - firstWeekDayOfMonthIndex);
     const afterFirstWeekDay = cells - (beforeFirstWeekDay + daysInMonth);
 
-    const daysArray = new Array();
+    const daysArray: MonthsDays[] = new Array();
 
     let count = 0;
 
@@ -96,8 +96,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     }
 
     daysArray.forEach((d) => {
-        if (count > 4) d.class = d.class + " weekend";
-
+        if (count > 4) { d.class = d.class + " weekend"; }
         count = count > 5 ? 0 : count + 1;
     });
 

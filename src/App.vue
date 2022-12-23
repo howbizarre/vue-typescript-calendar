@@ -39,16 +39,8 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-7 gap-2 p-3">
-                <span v-for="day, i in weekDayShort" class="week-day" :class="{'weekend': day === 'sat' || day === 'sun'}" :title="weekDayLong[i]">
-                    {{ day[0] }}
-                </span>
-                <template v-for="md in monthDaysArray">
-                    <button ref="dayBtn" @click="(event: Event) => getEvents(md, event)" :class="[{ current: md.current }, md.class, { active: isActive }]" class="calendar-day">
-                        {{ md["day"] }}
-                    </button>
-                </template>
-            </div>
+            <WeekDays :firstDay="firstDayOfTheWeek" />
+            <MonthDays :daysArray="monthDaysArray" :dateParts="dateParts" @onDayClick="dayClick" v-model="activatElm" />
         </div>
 
         <div class="info-bottom" role="alert">
@@ -64,17 +56,16 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { monthName } from "typescript-calendar-date";
-import { ref, onMounted } from "vue";
-import { weekDays as wD, getMonthDays } from "@/utils/calendar";
-import type { WeekFirstDay, monthsDays } from "@/utils/calendar";
+import { type WeekFirstDay, type MonthsDays, getMonthDays } from "@/utils/calendar";
+
+import WeekDays from "@/components/WeekDays.vue";
+import MonthDays from "@/components/MonthDays.vue";
 
 type DirectionNumber = 1 | 0 | -1;
 
 const firstDayOfTheWeek: WeekFirstDay = "monday";
-const weekDays = wD[firstDayOfTheWeek];
-const weekDayShort = weekDays.short;
-const weekDayLong = weekDays.long;
 
 const date = new Date();
 const year = ref(date.getFullYear());
@@ -85,24 +76,35 @@ const nameOfMonth = ref(monthName(month.value));
 const monthDaysArray = ref(getMonthDays(year.value, month.value, day.value));
 
 const resetMonth = ref(false);
-const isActive = ref(false);
+const dateParts = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() + nameOfMonth.value.slice(1)} ${year.value}`);
 
-const dayBtn = ref<HTMLElement[]>([]);
+const activatElm = ref<HTMLInputElement>();
+
+/**
+ * Pass parameters to components
+ * @param date
+ * @param evn
+ * @external activatElm
+ * @external dateParts
+ */
+const dayClick = (date: MonthsDays, evn: Event) => {
+    const month = date.part.month;
+
+    activatElm.value = evn.target as HTMLInputElement;
+    dateParts.value = `${date.day} ${month.charAt(0).toUpperCase() + month.slice(1)} ${date.part.year}`;
+};
 
 /**
  * If set direction to "-1" - draw month before
  * If set direction to "1" - draw month after
  * If set direction to "0" - reset to current month
- * 
  * @param direction numer 1 or -1 or 0
- * 
- * @external month.value
- * @external year.value
- * @external monthDaysArray.value
- * @external nameOfMonth.value
- * @external resetMonth.value
- * @external dayBtn.value
- * 
+ * @external month
+ * @external year
+ * @external monthDaysArray
+ * @external nameOfMonth
+ * @external resetMonth
+ * @external activatElm
  * @function getMonthDays
  * @function monthName
  */
@@ -113,9 +115,7 @@ const setMDA = (direction?: DirectionNumber): void => {
     const dec = mV === 12;
     const drctn = direction || 0;
 
-    dayBtn.value.forEach((e) => {
-        e.classList.remove("active");
-    });
+    activatElm.value = undefined;
 
     switch (drctn) {
         case -1:
@@ -147,21 +147,6 @@ const setMDA = (direction?: DirectionNumber): void => {
             resetMonth.value = false;
     }
 };
-
-const dateParts = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() + nameOfMonth.value.slice(1)} ${year.value}`);
-
-const getEvents = (date: monthsDays, e: Event) => {
-    e.preventDefault();
-
-    dayBtn.value.forEach((e: any) => {
-        e.classList.remove("active");
-    });
-
-    (e.target as HTMLInputElement).classList.add("active");
-
-    const month = date.part.month;
-    dateParts.value = `${date.day} ${month.charAt(0).toUpperCase() + month.slice(1)} ${date.part.year}`;
-};
 </script>
 
 <style>
@@ -180,37 +165,6 @@ body {
 
 .calendar-action.empty {
     @apply !bg-transparent;
-}
-
-.week-day {
-    @apply
-        w-[42px] h-[42px] rounded-full
-        flex items-center justify-center
-        capitalize text-center font-bold text-teal-600;
-}
-
-.calendar-day.weekend,
-.week-day.weekend {
-    @apply bg-sky-500/5;
-}
-
-.current-month {
-    @apply !text-black;
-}
-
-.calendar-day {
-    @apply
-        w-[42px] h-[42px]
-        text-center rounded-full border-none
-        transition-colors text-zinc-400 hover:bg-cyan-500/25;
-}
-
-.calendar-day.current {
-    @apply bg-teal-500/25;
-}
-
-.calendar-day.active {
-    @apply bg-cyan-500/25;
 }
 
 .info-bottom {
