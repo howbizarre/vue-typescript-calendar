@@ -114,9 +114,10 @@ const setMDA = (direction?: DirectionNumber): void => {
     const jan = mV === 1;
     const dec = mV === 12;
     const drctn = direction || 0;
-
-    const curMonth = monthName(date.getMonth() + 1) as string;
-
+    
+    const curDate = date.getMonth() + 1;
+    const curMonth = monthName(curDate) as string;
+    
     activatElm.value = undefined;
     dateParts.value = `${date.getDate()} ${curMonth[0].toUpperCase() + curMonth.slice(1)} ${date.getFullYear()}`;
 
@@ -125,9 +126,9 @@ const setMDA = (direction?: DirectionNumber): void => {
             month.value = jan ? 12 : mV - 1;
             year.value = jan ? yV - 1 : yV;
 
-            monthDaysArray.value = getMonthDays(year.value, month.value);
+            resetMonth.value = month.value !== curDate;
+            monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : new Date().getDate());
             nameOfMonth.value = monthName(month.value);
-            resetMonth.value = true;
 
             break;
 
@@ -135,19 +136,18 @@ const setMDA = (direction?: DirectionNumber): void => {
             month.value = dec ? 1 : mV + 1;
             year.value = dec ? yV + 1 : yV;
 
-            monthDaysArray.value = getMonthDays(year.value, month.value);
+            resetMonth.value = month.value !== curDate;
+            monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : new Date().getDate());
             nameOfMonth.value = monthName(month.value);
-            resetMonth.value = true;
 
             break;
 
         default:
             month.value = new Date().getMonth() + 1;
-            year.value = new Date().getFullYear();
 
-            monthDaysArray.value = getMonthDays(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate());
-            nameOfMonth.value = monthName(new Date().getMonth() + 1);
             resetMonth.value = false;
+            monthDaysArray.value = getMonthDays(new Date().getFullYear(), month.value, new Date().getDate());
+            nameOfMonth.value = monthName(month.value);
     }
 };
 </script>
