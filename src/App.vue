@@ -43,15 +43,7 @@
             <MonthDays :daysArray="monthDaysArray" :dateParts="dateParts" @onDayClick="dayClick" v-model="activatElm" />
         </div>
 
-        <div class="info-bottom" role="alert">
-            <span>The chosen day is <strong>{{ dateParts }}</strong></span>
-
-            <a href="https://github.com/howbizarre/vue-typescript-calendar" title="Vue 3 with Typescript Calendar and Tailwindcss">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="flex-shrink-0 h-5 w-5" style="" width="1em" height="1em" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.636 3.636 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2.001 2.001 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.104 2.104 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.892 3.892 0 0 1 1.025-2.688a3.594 3.594 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.427 9.427 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.593 3.593 0 0 1 .1 2.65a3.869 3.869 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.563 4.937a2.368 2.368 0 0 1 .675 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247Z"></path>
-                </svg>
-            </a>
-        </div>
+        <FooterLabel :dateParts="dateParts" />
     </div>
 </template>
 
@@ -62,6 +54,7 @@ import { type WeekFirstDay, type MonthsDays, getMonthDays } from "@/utils/calend
 
 import WeekDays from "@/components/WeekDays.vue";
 import MonthDays from "@/components/MonthDays.vue";
+import FooterLabel from "@/components/FooterLabel.vue";
 
 type DirectionNumber = 1 | 0 | -1;
 
@@ -114,10 +107,10 @@ const setMDA = (direction?: DirectionNumber): void => {
     const jan = mV === 1;
     const dec = mV === 12;
     const drctn = direction || 0;
-    
+
     const curDate = date.getMonth() + 1;
     const curMonth = monthName(curDate) as string;
-    
+
     activatElm.value = undefined;
     dateParts.value = `${date.getDate()} ${curMonth[0].toUpperCase() + curMonth.slice(1)} ${date.getFullYear()}`;
 
@@ -168,12 +161,5 @@ body {
 
 .calendar-action.empty {
     @apply !bg-transparent;
-}
-
-.info-bottom {
-    @apply
-        flex justify-between items-center p-4
-        leading-normal text-teal-700 bg-teal-100
-        rounded-b-2xl border border-b-4 border-teal-500/50
 }
 </style>
