@@ -6,7 +6,7 @@
                 <div v-if="setDate" class="grid grid-cols-3 p-3 text-left capitalize text-3xl font-serif">
                     <div>
                         <select v-model="month" class="bg-white">
-                            <option v-for="i in 12" :value="i">{{ monthName(i) }}</option>
+                            <option v-for="i in 12" :value="i">{{ monthName(i).charAt(0).toUpperCase() + monthName(i).slice(1) }}</option>
                         </select>
                     </div>
                     <div class="col-span-2"><input class="w-full" type="number" v-model="year" /></div>
@@ -124,8 +124,10 @@ const setMDA = (direction?: DirectionNumber): void => {
     const dec = mV === 12;
     const drctn = direction || 0;
 
+    const date = new Date();
     const curDate = date.getMonth() + 1;
     const curMonth = monthName(curDate) as string;
+    const curYear = date.getFullYear();
 
     activatElm.value = undefined;
     dateParts.value = `${date.getDate()} ${curMonth[0].toUpperCase() + curMonth.slice(1)} ${date.getFullYear()}`;
@@ -135,7 +137,7 @@ const setMDA = (direction?: DirectionNumber): void => {
             month.value = jan ? 12 : mV - 1;
             year.value = jan ? yV - 1 : yV;
 
-            resetMonth.value = month.value !== curDate;
+            resetMonth.value = month.value !== curDate || year.value !== curYear;
             monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : new Date().getDate());
             nameOfMonth.value = monthName(month.value);
 
@@ -145,7 +147,7 @@ const setMDA = (direction?: DirectionNumber): void => {
             month.value = dec ? 1 : mV + 1;
             year.value = dec ? yV + 1 : yV;
 
-            resetMonth.value = month.value !== curDate;
+            resetMonth.value = month.value !== curDate || year.value !== curYear;
             monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : new Date().getDate());
             nameOfMonth.value = monthName(month.value);
 
@@ -153,16 +155,22 @@ const setMDA = (direction?: DirectionNumber): void => {
 
         default:
             month.value = new Date().getMonth() + 1;
+            year.value = new Date().getFullYear();
 
             resetMonth.value = false;
-            monthDaysArray.value = getMonthDays(new Date().getFullYear(), month.value, new Date().getDate());
+            monthDaysArray.value = getMonthDays(year.value, month.value, new Date().getDate());
             nameOfMonth.value = monthName(month.value);
     }
 };
 
 const setYear = (y: number, m: number): void => {
+    const date = new Date();
+    const curYear = date.getFullYear();
+    const curMonth = date.getMonth() + 1;
+    
+    resetMonth.value = m !== curMonth || y !== curYear;
     nameOfMonth.value = monthName(m);
-    monthDaysArray.value = getMonthDays(y, m);
+    monthDaysArray.value = getMonthDays(y, m, resetMonth.value ? 0 : new Date().getDate());
     setDate.value = false;
 };
 </script>
