@@ -2,9 +2,17 @@
     <div class="p-3 max-w-sm">
         <div class="rounded-t-2xl border border-b-0 border-t-4 border-teal-500/50 pb-3">
             <div class="flex justify-between mb-3 border-b border-b-teal-500/50 p-3">
-                <h1 class="p-3 text-left capitalize text-3xl font-serif">{{ nameOfMonth }} {{ year }}</h1>
+                <h1 @click="setDate = !setDate" v-if="!setDate" class="p-3 text-left capitalize text-3xl font-serif">{{ nameOfMonth }} {{ year }}</h1>
+                <div v-if="setDate" class="grid grid-cols-3 p-3 text-left capitalize text-3xl font-serif">
+                    <div>
+                        <select v-model="month" class="bg-white">
+                            <option v-for="i in 12" :value="i">{{ monthName(i) }}</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2"><input class="w-full" type="number" v-model="year" /></div>
+                </div>
 
-                <div class="flex items-center">
+                <div class="flex items-center" v-if="!setDate">
                     <button @click="setMDA(-1)" class="calendar-action">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5">
                             <g data-name="arrowhead-left">
@@ -37,10 +45,16 @@
                         </svg>
                     </button>
                 </div>
+                <div class="flex items-center" v-if="setDate">
+                    <button class="calendar-action" @click="setYear(year, month)">Set</button>
+                </div>
             </div>
 
             <WeekDays :firstDay="firstDayOfTheWeek" />
             <MonthDays :daysArray="monthDaysArray" :dateParts="dateParts" @onDayClick="dayClick" v-model="activatElm" />
+        </div>
+
+        <div>
         </div>
 
         <FooterLabel :dateParts="dateParts" />
@@ -57,6 +71,8 @@ import MonthDays from "@/components/MonthDays.vue";
 import FooterLabel from "@/components/FooterLabel.vue";
 
 type DirectionNumber = 1 | 0 | -1;
+
+const setDate = ref(false);
 
 const firstDayOfTheWeek: WeekFirstDay = "monday";
 
@@ -142,6 +158,12 @@ const setMDA = (direction?: DirectionNumber): void => {
             monthDaysArray.value = getMonthDays(new Date().getFullYear(), month.value, new Date().getDate());
             nameOfMonth.value = monthName(month.value);
     }
+};
+
+const setYear = (y: number, m: number): void => {
+    nameOfMonth.value = monthName(m);
+    monthDaysArray.value = getMonthDays(y, m);
+    setDate.value = false;
 };
 </script>
 

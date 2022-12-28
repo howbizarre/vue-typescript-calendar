@@ -26,6 +26,9 @@ export const weekDays = {
         "short": ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
         "long": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     },
+    "months": {
+        "short": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    }
 };
 
 export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): MonthsDays[] => {
@@ -40,7 +43,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     };
 
     const nextMonth: CalendarMonth = {
-        year: someMonth === 12 ? someYear + 1 : someYear,
+        year: someMonth === 12 ? Number(someYear + 1) : someYear,
         month: monthName(someMonth + 1),
     };
 
