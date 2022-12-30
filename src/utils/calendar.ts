@@ -10,6 +10,7 @@ export type MonthsDays = {
     };
     "day": string;
     "current": boolean;
+    "active"?: boolean;
     "class": string;
 };
 

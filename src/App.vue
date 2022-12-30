@@ -70,14 +70,29 @@ import { ref } from "vue";
 import { monthName } from "typescript-calendar-date";
 import { type WeekFirstDay, type MonthsDays, getMonthDays } from "@/utils/calendar";
 
+/** Cpmponents */
 import WeekDays from "@/components/WeekDays.vue";
 import MonthDays from "@/components/MonthDays.vue";
 import FooterLabel from "@/components/FooterLabel.vue";
 
+/**
+ * The values of calendar moving
+ * 1 for forwar moving
+ * -1 for backward moving
+ * 0 for reseting at the start point
+ */
 type DirectionNumber = 1 | 0 | -1;
 
+/**
+ * Set custom date to components
+ * different from normal flow - backward or forward
+ */
 const setDate = ref(false);
 
+/**
+ * Must be rewrite the engine
+ * to obtain which day of the week are first day
+ */
 const firstDayOfTheWeek: WeekFirstDay = "monday";
 
 const date = new Date();
@@ -91,6 +106,9 @@ const monthDaysArray = ref(getMonthDays(year.value, month.value, day.value));
 const resetMonth = ref(false);
 const dateParts = ref(`${day.value} ${nameOfMonth.value.charAt(0).toUpperCase() + nameOfMonth.value.slice(1)} ${year.value}`);
 
+/**
+ * Element clicked on
+ */
 const activatElm = ref<HTMLInputElement>();
 
 /**
@@ -117,7 +135,6 @@ const dayClick = (date: MonthsDays, evn: Event) => {
  * @external monthDaysArray
  * @external nameOfMonth
  * @external resetMonth
- * @external activatElm
  * @function getMonthDays
  * @function monthName
  */
@@ -163,7 +180,6 @@ const setMDA = (direction?: DirectionNumber): void => {
             monthDaysArray.value = getMonthDays(year.value, month.value, curDay);
             nameOfMonth.value = monthName(month.value);
 
-            //activatElm.value = undefined;
             dateParts.value = `${curDay} ${curMonthName[0].toUpperCase() + curMonthName.slice(1)} ${curYear}`;
     }
 };
