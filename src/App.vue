@@ -46,7 +46,11 @@
                     </button>
                 </div>
                 <div class="flex items-center" v-if="setDate">
-                    <button class="calendar-action" @click="setYear(year, month)">Set</button>
+                    <button class="calendar-action" @click="setYear(year, month)">
+                        <svg width="32" height="32" viewBox="0 0 256 256">
+                            <path fill="currentColor" d="M104 192a8.5 8.5 0 0 1-5.7-2.3l-56-56a8.1 8.1 0 0 1 11.4-11.4l50.3 50.4L210.3 66.3a8.1 8.1 0 0 1 11.4 11.4l-112 112a8.5 8.5 0 0 1-5.7 2.3Z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
@@ -124,21 +128,19 @@ const setMDA = (direction?: DirectionNumber): void => {
     const dec = mV === 12;
     const drctn = direction || 0;
 
-    const date = new Date();
-    const curDate = date.getMonth() + 1;
-    const curMonth = monthName(curDate) as string;
-    const curYear = date.getFullYear();
-
-    activatElm.value = undefined;
-    dateParts.value = `${date.getDate()} ${curMonth[0].toUpperCase() + curMonth.slice(1)} ${date.getFullYear()}`;
+    const curDate = new Date();
+    const curDay = curDate.getDate();
+    const curMonth = curDate.getMonth() + 1;
+    const curMonthName = monthName(curMonth) as string;
+    const curYear = curDate.getFullYear();
 
     switch (drctn) {
         case -1:
             month.value = jan ? 12 : mV - 1;
             year.value = jan ? yV - 1 : yV;
 
-            resetMonth.value = month.value !== curDate || year.value !== curYear;
-            monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : new Date().getDate());
+            resetMonth.value = month.value !== curMonth || year.value !== curYear;
+            monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : curDay);
             nameOfMonth.value = monthName(month.value);
 
             break;
@@ -147,19 +149,22 @@ const setMDA = (direction?: DirectionNumber): void => {
             month.value = dec ? 1 : mV + 1;
             year.value = dec ? yV + 1 : yV;
 
-            resetMonth.value = month.value !== curDate || year.value !== curYear;
-            monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : new Date().getDate());
+            resetMonth.value = month.value !== curMonth || year.value !== curYear;
+            monthDaysArray.value = getMonthDays(year.value, month.value, resetMonth.value ? 0 : curDay);
             nameOfMonth.value = monthName(month.value);
 
             break;
 
         default:
-            month.value = new Date().getMonth() + 1;
-            year.value = new Date().getFullYear();
+            month.value = curMonth;
+            year.value = curYear;
 
             resetMonth.value = false;
-            monthDaysArray.value = getMonthDays(year.value, month.value, new Date().getDate());
+            monthDaysArray.value = getMonthDays(year.value, month.value, curDay);
             nameOfMonth.value = monthName(month.value);
+
+            //activatElm.value = undefined;
+            dateParts.value = `${curDay} ${curMonthName[0].toUpperCase() + curMonthName.slice(1)} ${curYear}`;
     }
 };
 
@@ -167,10 +172,10 @@ const setYear = (y: number, m: number): void => {
     const date = new Date();
     const curYear = date.getFullYear();
     const curMonth = date.getMonth() + 1;
-    
+
     resetMonth.value = m !== curMonth || y !== curYear;
     nameOfMonth.value = monthName(m);
-    monthDaysArray.value = getMonthDays(y, m, resetMonth.value ? 0 : new Date().getDate());
+    monthDaysArray.value = getMonthDays(y, m, resetMonth.value ? 0 : date.getDate());
     setDate.value = false;
 };
 </script>
@@ -191,5 +196,17 @@ body {
 
 .calendar-action.empty {
     @apply !bg-transparent;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>

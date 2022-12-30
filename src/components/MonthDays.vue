@@ -1,6 +1,6 @@
 <template>
     <div class="calendar-grid">
-        <template v-for="md in daysArray">
+        <template v-for="md, index in daysArray" :key="'md' + md.part.year + md.part.month + md.day + index">
             <button ref="dayBtn" @click="(event: Event) => $emit('onDayClick', md, event)" :class="[{ current: md.current }, md.class]" class="calendar-day">
                 {{ md["day"] }}
             </button>

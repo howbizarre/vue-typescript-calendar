@@ -25,9 +25,6 @@ export const weekDays = {
     "sunday": {
         "short": ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
         "long": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    },
-    "months": {
-        "short": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     }
 };
 
