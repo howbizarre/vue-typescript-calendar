@@ -95,10 +95,11 @@ const setDate = ref(false);
  */
 const firstDayOfTheWeek: WeekFirstDay = "monday";
 
-const date = new Date();
-const year = ref(date.getFullYear());
-const month = ref(date.getMonth() + 1);
-const day = ref(date.getDate());
+const curDate = new Date();
+
+const year = ref(curDate.getFullYear());
+const month = ref(curDate.getMonth() + 1);
+const day = ref(curDate.getDate());
 
 const nameOfMonth = ref(monthName(month.value));
 const monthDaysArray = ref(getMonthDays(year.value, month.value, day.value));
@@ -130,6 +131,7 @@ const dayClick = (date: MonthsDays, evn: Event) => {
  * If set direction to "1" - draw month after
  * If set direction to "0" - reset to current month
  * @param direction numer 1 or -1 or 0
+ * @external curDate
  * @external month
  * @external year
  * @external monthDaysArray
@@ -145,7 +147,6 @@ const setMDA = (direction?: DirectionNumber): void => {
     const dec = mV === 12;
     const drctn = direction || 0;
 
-    const curDate = new Date();
     const curDay = curDate.getDate();
     const curMonth = curDate.getMonth() + 1;
     const curMonthName = monthName(curMonth) as string;
@@ -185,13 +186,12 @@ const setMDA = (direction?: DirectionNumber): void => {
 };
 
 const setYear = (y: number, m: number): void => {
-    const date = new Date();
-    const curYear = date.getFullYear();
-    const curMonth = date.getMonth() + 1;
+    const curYear = curDate.getFullYear();
+    const curMonth = curDate.getMonth() + 1;
 
     resetMonth.value = m !== curMonth || y !== curYear;
     nameOfMonth.value = monthName(m);
-    monthDaysArray.value = getMonthDays(y, m, resetMonth.value ? 0 : date.getDate());
+    monthDaysArray.value = getMonthDays(y, m, resetMonth.value ? 0 : curDate.getDate());
     setDate.value = false;
 };
 </script>

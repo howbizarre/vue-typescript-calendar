@@ -1,7 +1,7 @@
 <template>
     <div class="calendar-grid">
         <template v-for="md, index in daysArray" :key="md.part.year + md.part.month + md.day">
-            <button :id="md.part.year + md.part.month + md.day" ref="dayBtn" @click="(event: Event) => $emit('onDayClick', md, event)" :class="[{ current: md.current }, md.class]" class="calendar-day">
+            <button :id="`${md.part.year}-${monthNumber(md.part.month as Month) < 10 ? '0' + monthNumber(md.part.month as Month) : monthNumber(md.part.month as Month)}-${Number(md.day) < 10 ? '0' + md.day : md.day}`" ref="dayBtn" @click="(event: Event) => $emit('onDayClick', md, event)" :class="[{ current: md.current }, md.class]" class="calendar-day">
                 {{ md["day"] }}
             </button>
         </template>
@@ -9,8 +9,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { monthNumber, parseIso8601String } from "typescript-calendar-date";
+import { ref, watch, onUpdated } from "vue";
+
 import type { MonthsDays } from "@/utils/calendar";
+import type { Month } from "typescript-calendar-date/dist/consts";
 
 const props = defineProps<{
     daysArray: MonthsDays[];
@@ -19,6 +22,10 @@ const props = defineProps<{
 }>();
 
 const dayBtn = ref<HTMLElement[]>([]);
+
+onUpdated(() => {
+    console.log(parseIso8601String(props.modelValue?.id as string));
+});
 
 watch(
     () => props.modelValue,
