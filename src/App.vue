@@ -58,9 +58,6 @@
             <MonthDays :daysArray="monthDaysArray" :dateParts="dateParts" @onDayClick="dayClick" v-model="activatElm" />
         </div>
 
-        <div>
-        </div>
-
         <FooterLabel :dateParts="dateParts" />
     </div>
 </template>
@@ -151,7 +148,7 @@ const setMDA = (direction?: DirectionNumber): void => {
     const curMonth = curDate.getMonth() + 1;
     const curMonthName = monthName(curMonth) as string;
     const curYear = curDate.getFullYear();
-
+    
     switch (drctn) {
         case -1:
             month.value = jan ? 12 : mV - 1;
@@ -212,17 +209,5 @@ body {
 
 .calendar-action.empty {
     @apply !bg-transparent;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
 }
 </style>

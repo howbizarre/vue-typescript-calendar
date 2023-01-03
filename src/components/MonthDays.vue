@@ -24,7 +24,8 @@ const props = defineProps<{
 const dayBtn = ref<HTMLElement[]>([]);
 
 onUpdated(() => {
-    console.log(parseIso8601String(props.modelValue?.id as string));
+    props.modelValue?.id && console.log(parseIso8601String(props.modelValue?.id as string));
+    console.log("props.daysArray", props.daysArray);
 });
 
 watch(

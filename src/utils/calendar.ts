@@ -7,6 +7,7 @@ export type MonthsDays = {
     "part": {
         "year": number;
         "month": string;
+        "day": number;
     };
     "day": string;
     "current": boolean;
@@ -30,19 +31,22 @@ export const weekDays = {
 };
 
 export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): MonthsDays[] => {
-    const month: CalendarMonth = {
+    const month: CalendarDate = {
         year: someYear,
         month: monthName(someMonth),
+        day: someDay
     };
 
-    const prevMonth: CalendarMonth = {
+    const prevMonth: CalendarDate = {
         year: someMonth === 1 ? someYear - 1 : someYear,
         month: monthName(someMonth - 1),
+        day: someDay,
     };
 
-    const nextMonth: CalendarMonth = {
+    const nextMonth: CalendarDate = {
         year: someMonth === 12 ? Number(someYear + 1) : someYear,
         month: monthName(someMonth + 1),
+        day: someDay,
     };
 
     const firstDay: CalendarDate = {
@@ -78,6 +82,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     /** Days of the current month */
     for (let cm = 0; cm < daysInMonth; cm++) {
         const current = someDay === cm + 1;
+        
         daysArray.push({
             "part": month,
             "day": (cm + 1).toString(),
