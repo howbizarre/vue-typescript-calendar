@@ -1,4 +1,4 @@
-import type { CalendarDate, CalendarMonth } from "typescript-calendar-date";
+import type { CalendarDate } from "typescript-calendar-date";
 import { monthName, dayOfWeek, numberOfDaysInMonth } from "typescript-calendar-date";
 
 export type WeekFirstDay = "monday" | "sunday";
@@ -82,7 +82,7 @@ export const getMonthDays = (someYear: number, someMonth: number, someDay = 0): 
     /** Days of the current month */
     for (let cm = 0; cm < daysInMonth; cm++) {
         const current = someDay === cm + 1;
-        
+
         daysArray.push({
             "part": month,
             "day": (cm + 1).toString(),
