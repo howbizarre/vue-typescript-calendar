@@ -25,7 +25,6 @@ const dayBtn = ref<HTMLElement[]>([]);
 
 onUpdated(() => {
     props.modelValue?.id && console.log(parseIso8601String(props.modelValue?.id as string));
-    console.log("props.daysArray", props.daysArray);
 });
 
 watch(
